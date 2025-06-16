@@ -55,12 +55,7 @@ void EnableDebugLayer(){
 	}
 }
 
-#ifdef _DEBUG
-int main() {
-#else
-#include<Windows.h>
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
-#endif
 	DebugOutputFormatString( "Show window test.");
 	HINSTANCE hInst = GetModuleHandle(nullptr);
 	//ウィンドウクラス生成＆登録
@@ -102,7 +97,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		D3D_FEATURE_LEVEL_11_0,
 	};
 	HRESULT result = S_OK;
+#ifdef DEBUG
 	if (FAILED(CreateDXGIFactory2(DXGI_CREATE_FACTORY_DEBUG, IID_PPV_ARGS(&dxgiFactory_)))) {
+#else
+	if (FAILED(CreateDXGIFactory2(0, IID_PPV_ARGS(&dxgiFactory_)))) {
+#endif // DEBUG
 		if(FAILED(CreateDXGIFactory2(0, IID_PPV_ARGS(&dxgiFactory_)))) {
 			return -1;
 		}
